@@ -10,18 +10,6 @@ pnpm start
 > I want to implement something like undo redo, but I can't find a way to watch a deeply nested object.
 > `track()` on `useTask$` and `useBrowserVisibleTask$` looks like only track for 1-level deep only
 ```tsx
-## Setup
-```shell
-git clone https://github.com/Darren-Ter/qwik-issue-reproduction.git
-cd qwik-issue-reproduction
-pnpm i
-pnpm start
-// Open browser console
-```
-## Code
-> I want to implement something like undo redo, but I can't find a way to watch a deeply nested object.
-> `track()` on `useTask$` and `useBrowserVisibleTask$` looks like only track for 1-level deep only
-```tsx
 import { component$, useBrowserVisibleTask$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
@@ -69,7 +57,4 @@ export default component$(() => {
 export const head: DocumentHead = {
   title: 'Issue Reproduction',
 };
-
-```
-
 ```
