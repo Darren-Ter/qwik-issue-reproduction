@@ -4,62 +4,67 @@
 - [Discord](https://qwik.builder.io/chat)
 - [Qwik GitHub](https://github.com/BuilderIO/qwik)
 - [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
 
 ---
 
-## Project Structure
-
-This project is using Qwik with [QwikCity](https://qwik.builder.io/qwikcity/overview/). QwikCity is just a extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
-
-Inside your project, you'll see the following directory structure:
-
-```
-├── public/
-│   └── ...
-└── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
-```
-
-- `src/routes`: Provides the directory based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.builder.io/qwikcity/routing/overview/) for more info.
-
-- `src/components`: Recommended directory for components.
-
-- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
-
-## Add Integrations and deployment
-
-Use the `pnpm qwik add` command to add additional integrations. Some examples of integrations include: Cloudflare, Netlify or Express server, and the [Static Site Generator (SSG)](https://qwik.builder.io/qwikcity/guides/static-site-generation/).
-
+## Setup
 ```shell
-pnpm qwik add # or `yarn qwik add`
+git clone https://github.com/Darren-Ter/qwik-issue-reproduction.git
+cd qwik-issue-reproduction
+pnpm i
+pnpm start
+// Open browser console
 ```
+## Code
+> I want to implement something like undo redo, but I can't find a way to watch a deeply nested object.
+> `track()` on `useTask$` and `useBrowserVisibleTask$` looks like only track for 1-level deep only
+```tsx
+import { component$, useBrowserVisibleTask$, useStore } from '@builder.io/qwik';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
-## Development
+export default component$(() => {
+  const store = useStore({
+    framework: {
+      name: 'Qwik',
+      characteristics: [
+        'Quick!',
+        'Game-changing',
+      ]
+    }
+  }, { deep: true })
 
-Development mode uses [Vite's development server](https://vitejs.dev/). During development, the `dev` command will server-side render (SSR) the output.
+  useBrowserVisibleTask$(({ track }) => {
+    //* Working
+    const updatedCharacteristics = track(store)
+    console.group("Track on `store`")
+    console.log(updatedCharacteristics)
+    console.groupEnd()
+  })
 
-```shell
-npm start # or `yarn start`
-```
+  useBrowserVisibleTask$(({ track }) => {
+    //* Not Working
+    const updatedCharacteristics = track(store.framework.characteristics)
+    console.group("Track on `store.framework.characteristics`")
+    console.log(updatedCharacteristics)
+    console.groupEnd()
+  })
 
-> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
+  return (
+    <>
+      <button
+        onClick$={() => store.framework.characteristics.push('Awesome!')}
+      >
+        Click Me 
+      </button>
+      <pre>
+        { JSON.stringify(store.framework, null, 2) }
+      </pre>
+    </>
+  );
+});
 
-## Preview
+export const head: DocumentHead = {
+  title: 'Issue Reproduction',
+};
 
-The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to locally preview a production build, and it should not be used as a production server.
-
-```shell
-pnpm preview # or `yarn preview`
-```
-
-## Production
-
-The production build will generate client and server modules by running both client and server build commands. Additionally, the build command will use Typescript to run a type check on the source code.
-
-```shell
-pnpm build # or `yarn build`
 ```
