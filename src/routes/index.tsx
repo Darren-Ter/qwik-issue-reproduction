@@ -24,6 +24,7 @@ export default component$(() => {
     //* Not Working
     const updatedCharacteristics = track(store)
     console.group("Track on `store`")
+    console.log("👉🏻 How to trigger `track` here on every changes on nested property of `store`?")
     console.log(updatedCharacteristics)
     console.groupEnd()
   })
