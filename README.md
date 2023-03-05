@@ -26,16 +26,16 @@ export default component$(() => {
 
   useBrowserVisibleTask$(({ track }) => {
     //* Working
-    const updatedCharacteristics = track(store)
-    console.group("Track on `store`")
+    const updatedCharacteristics = track(store.framework.characteristics)
+    console.group("Track on `store.framework.characteristics`")
     console.log(updatedCharacteristics)
     console.groupEnd()
   })
 
   useBrowserVisibleTask$(({ track }) => {
     //* Not Working
-    const updatedCharacteristics = track(store.framework.characteristics)
-    console.group("Track on `store.framework.characteristics`")
+    const updatedCharacteristics = track(store)
+    console.group("Track on `store`")
     console.log(updatedCharacteristics)
     console.groupEnd()
   })
