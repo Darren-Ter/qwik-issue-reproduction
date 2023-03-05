@@ -30,6 +30,9 @@ export default component$(() => {
 
   return (
     <>
+      <p>
+        Open browser console and click this button
+      </p>
       <button
         onClick$={() => store.framework.characteristics.push('Awesome!')}
       >
